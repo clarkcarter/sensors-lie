@@ -40,19 +40,14 @@
 
 <p>
 I assumed this was a solved problem. Robots have sensors. Sometimes sensors break.
-Surely there's a standard way to figure out which one. I went looking for it about a
-year ago, didn't find it, and accidentally spent the next twelve months building one.
+Surely there's a standard way to figure out which one. I went looking for it, didn't 
+  find it, and one thing lead to another... I started building one.
 </p>
 
 <p>
-Let me back up.
-</p>
-
-<p>
-I was reading about warehouse robots. This is just the kind of weird nerd stuff I read
-before bed. Don't judge me. The little flat
-ones that scoot around fulfilment centres carrying shelves. Turns out they have a bunch
-of sensors: encoders on the wheels, an IMU for orientation, LIDAR for obstacle avoidance,
+I was reading about warehouse robots before bed one night. The little flat ones that scoot around fulfilment centres carrying shelves. 
+Don't judge. I just was ok. 
+Turns out they have a bunch of sensors: encoders on the wheels, an IMU for orientation, LIDAR for obstacle avoidance,
 sometimes GPS. These sensors are how the robot understands where it is and what's around
 it. They are, in a very literal sense, the robot's entire model of reality.
 </p>
@@ -70,7 +65,7 @@ At least one is lying. And the robot has no idea which one.
 </p>
 
 <p>
-This matters because robots move. A warehouse AGV covers 20 metres in 10 seconds. An
+This matters because robots move. A warehouse robot covers 20 metres in 10 seconds. An
 autonomous car on a highway covers 330. That's a lot of ground to travel while trusting
 a sensor that's lying to you.
 </p>
@@ -113,7 +108,7 @@ practice means serious engineering per configuration. Change a sensor, redo the 
 You can throw machine learning at it. Of course you can. You can throw machine learning
 at anything. You'll need labelled examples of every fault type on every sensor, it's a
 black box that no safety certifier will touch, and you retrain every time something
-changes. But hey, at least you can put AI on your pitch deck.
+changes.
 </p>
 
 <p>
@@ -124,27 +119,20 @@ in robotics is more sensors, not fewer.
 <div class="sep">* * *</div>
 
 <p>
-So here's where I fell in. I should be upfront: I am not a roboticist. I don't have a
-PhD in control theory. I don't even work in this industry. I'm a generalist who got
+So here's where I fell in. I should be upfront: I am not a robot guy. I don't have a
+PhD in control theory. I don't even work in this industry. I'm an ops guy who works in software, who got
 nerd-sniped and apparently has no self-control.
 </p>
 
 <p>
-The mathematical ideas behind what I ended up building aren't new. There's research on
-using graph theory to reason about sensor consistency that predates my work by years. But
+The mathematical ideas behind what I ended up building aren't new. There's research that predates my work by years. But
 as far as I could tell, nobody had taken those ideas and turned them into a working,
-certifiable system. The theory existed. The product didn't.
+certifiable system.
 </p>
 
 <p>
-So I just... followed my interest and built one. Twelve months of "I'll just try one
-more thing." I did <em>*jazz hands*</em> math stuff. I told my mates Amazon was going
-to buy it for $100 million. They nodded politely. Amazon did not buy it for $100 million.
-</p>
-
-<p>
-I called it HOLMES, because it identifies the guilty party from a lineup of suspects.
-Yes I'm aware the name is a bit much. I'm keeping it.
+So I just... followed one "oh i could look into that" and another "hey this is weird", and here we are. I did <em>*jazz hands*</em> math stuff, built it, and told my mates Amazon was going
+to buy it for $100 million. Amazon did not buy it for $100 million.
 </p>
 
 <p>
@@ -152,12 +140,12 @@ The core idea is this. Sensors measuring the same physical scene create natural 
 relationships. Your GPS and your encoder both measure position, so they should agree
 within their noise levels. Your IMU and LIDAR both measure motion, so their derivatives
 should be consistent. You can represent all these relationships as a graph and then ask
-a beautifully simple question: which node, if you removed it, would make everything else
+a simple question: which node, if you removed it, would make everything else
 agree?
 </p>
 
 <p>
-I will not pretend I got here in a straight line. My first attempt was embarrassingly
+I did not get here in a straight line. My first attempt was embarrassingly
 naive and basically didn't work at all. I'd ask Claude Code if the approach was sound
 and it would tell me it was brilliant, revolutionary even. Then I'd actually test it and
 nothing worked. Then I'd go back and ask what went wrong and it would say "ah yes, I see
@@ -166,7 +154,7 @@ the issue" like it hadn't just told me it was perfect. Rinse, repeat, for months
 
 <p>
 But the graph framing felt right, and the more I dug into the maths (with significantly
-less trust in my AI cheerleader) the more I realised the question above has a precise
+less trust in my AI gaslighter) the more I realised the question above has a precise
 answer. One that doesn't need training data or pre-built models. Just each sensor's noise
 spec (on the datasheet) and the physical relationships between them.
 </p>
@@ -180,17 +168,9 @@ the system doesn't guess. It just goes quiet.
 
 <p>
 That "going quiet" part is the thing I'm most proud of. A wrong answer is actively
-dangerous. Silence is always safe. So I designed the entire system around the principle
+dangerous. So I designed the entire system around the principle
 that not knowing is fine. Confidently blaming the wrong sensor is not.
 </p>
-
-<pre>
-Sensors ──→ [Your Fault Detector] ──→ [HOLMES] ──→  "it's sensor 3"
-                    │                     │
-                "anomaly!"                ├──→  "sensors 2 and 5"
-                                          │
-                                          └──→  "not sure, abstaining"
-</pre>
 
 <div class="sep">* * *</div>
 
@@ -231,8 +211,8 @@ allowed to put this kind of thing on an actual robot.
 <div class="sep">* * *</div>
 
 <p>
-Naturally, the next step was to ask my AI how much this could be worth and start window
-shopping electric Lamborghinis. I ran the numbers on licensing deals. I drafted pitch
+Naturally, the next step was to ask my AI how much this could be worth and started
+shopping for electric Lambos. I ran the numbers on licensing deals. I drafted pitch
 emails. I imagined the TechCrunch headline. It turns out (and I cannot stress how
 shocking this was to me) that having a good thing on your laptop and getting anyone to
 actually pay money for it are two completely unrelated skills. Nobody was interested. Not
@@ -240,21 +220,18 @@ even a little bit.
 </p>
 
 <p>
-So here I am, writing this up, because maybe the internet can help. The numbers are hard
-to argue with, and I've argued with them plenty.
+So here I am, sharing this thing because i think it's interesting and some others might too.
 </p>
 
 <p>
 What I don't have is real sensor data from real robots. Everything so far is simulated
-(realistic noise profiles, realistic fault modes, but still synthetic). If you work on
+(realistic noise profiles, realistic fault modes, but still synthetic) or "almost right" real datasets. If you work on
 autonomous systems and have sensor logs collecting dust on a hard drive somewhere, I
-would love to throw HOLMES at them and see what happens.
+would love to throw them through my system and see what happens.
 </p>
 
 <p>
-I'm at <a href="mailto:clark@clarkcarter.io">clark@clarkcarter.io</a>. I still don't
-fully understand how I got here. I went from "huh, that's an interesting problem" to
-writing IEC 61508 certification documents. I don't even know what I'd put on my LinkedIn.
+I'm at <a href="mailto:clark@clarkcarter.com">clark@clarkcarter.com</a>.
 </p>
 
 <div class="footer">
